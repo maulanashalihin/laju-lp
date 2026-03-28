@@ -10,6 +10,9 @@ const {
     title = "Laju - The Complete TypeScript & Go Framework. 11x Faster Than Express.",
     description = "Combine HyperExpress/Fiber speed, Svelte 5 reactivity, and full-stack productivity. Built-in auth, storage, email, testing & CI/CD. Zero config, maximum velocity.",
 } = Astro.props;
+
+const canonicalUrl = "https://laju.dev";
+const ogImage = "https://laju.dev/og-image.png";
 ---
 
 <!doctype html>
@@ -19,9 +22,30 @@ const {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="icon" href="/favicon.png" />
         <meta name="generator" content={Astro.generator} />
+        
+        <!-- Primary Meta Tags -->
+        <title>{title}</title>
+        <meta name="title" content={title} />
         <meta name="description" content={description} />
         <meta name="theme-color" content="#0f172a" />
-        <title>{title}</title>
+        <link rel="canonical" href={canonicalUrl} />
+        
+        <!-- Open Graph / Facebook -->
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={canonicalUrl} />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:image" content={ogImage} />
+        <meta property="og:site_name" content="Laju Framework" />
+        
+        <!-- Twitter Card -->
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content={canonicalUrl} />
+        <meta property="twitter:title" content={title} />
+        <meta property="twitter:description" content={description} />
+        <meta property="twitter:image" content={ogImage} />
+        
+        <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
