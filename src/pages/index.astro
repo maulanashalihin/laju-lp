@@ -4,7 +4,7 @@ import Layout from "../layouts/Layout.astro";
 
 <Layout>
     <!-- Copy Script -->
-    <script>
+    <script is:inline>
         function copyCommand(cmd, btn) {
             navigator.clipboard.writeText(cmd).then(() => {
                 const originalHtml = btn.innerHTML;
