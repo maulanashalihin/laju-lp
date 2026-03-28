@@ -1,0 +1,48 @@
+---
+interface Props {
+    currentLanguage: 'en' | 'id';
+    translatedSlug?: string;
+}
+
+const { currentLanguage, translatedSlug } = Astro.props;
+
+const labels = {
+    en: {
+        switch: 'Read in Indonesian',
+        target: 'ID',
+    },
+    id: {
+        switch: 'Baca dalam Bahasa Inggris',
+        target: 'EN',
+    },
+};
+
+const currentLabel = labels[currentLanguage];
+---
+
+{translatedSlug && (
+    <a
+        href={`/blog/${translatedSlug}`}
+        class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-800 border border-slate-700 hover:border-brand-500/50 transition-all text-sm font-medium"
+    >
+        <svg
+            class="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+        >
+            <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.148"
+            />
+        </svg>
+        <span>{currentLabel.switch}</span>
+        <span
+            class="px-2 py-0.5 text-xs font-semibold rounded bg-brand-500/10 text-brand-400 border border-brand-500/20"
+        >
+            {currentLabel.target}
+        </span>
+    </a>
+)}

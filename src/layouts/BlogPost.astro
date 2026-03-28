@@ -1,0 +1,80 @@
+---
+import "../styles/global.css";
+
+interface Props {
+    title?: string;
+    description?: string;
+    language?: 'en' | 'id';
+    pubDate?: Date;
+    author?: string;
+    coverImage?: string;
+    canonicalUrl?: string;
+}
+
+const {
+    title = "Blog - Laju Framework",
+    description = "Articles, tutorials, and updates from the Laju Framework team.",
+    language = "en",
+    pubDate,
+    author,
+    coverImage,
+    canonicalUrl = "https://laju.dev/blog",
+} = Astro.props;
+
+const ogImage = "https://laju.dev/og-image.png";
+
+const formatDate = (date: Date) => {
+    return new Intl.DateTimeFormat(language === 'en' ? 'en-US' : 'id-ID', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+    }).format(date);
+};
+---
+
+<!doctype html>
+<html lang={language} class="scroll-smooth">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" href="/favicon.png" />
+        <meta name="generator" content={Astro.generator} />
+
+        <!-- Primary Meta Tags -->
+        <title>{title}</title>
+        <meta name="title" content={title} />
+        <meta name="description" content={description} />
+        <meta name="theme-color" content="#0f172a" />
+        <link rel="canonical" href={canonicalUrl} />
+
+        <!-- Open Graph / Facebook -->
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content={canonicalUrl} />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:image" content={ogImage} />
+        <meta property="og:site_name" content="Laju Framework" />
+        {pubDate && <meta property="article:published_time" content={pubDate.toISOString()} />}
+        {author && <meta property="article:author" content={author} />}
+
+        <!-- Twitter Card -->
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content={canonicalUrl} />
+        <meta property="twitter:title" content={title} />
+        <meta property="twitter:description" content={description} />
+        <meta property="twitter:image" content={ogImage} />
+
+        <!-- Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap"
+            rel="stylesheet"
+        />
+    </head>
+    <body
+        class="bg-slate-950 text-white antialiased selection:bg-brand-500 selection:text-white"
+    >
+        <slot />
+    </body>
+</html>

@@ -1,0 +1,104 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+    post: CollectionEntry<'blog'>;
+}
+
+const { post } = Astro.props;
+const { data, id } = post;
+
+const formatDate = (date: Date, language: 'en' | 'id') => {
+    return new Intl.DateTimeFormat(language === 'en' ? 'en-US' : 'id-ID', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+    }).format(date);
+};
+
+const languageConfig = {
+    en: { label: 'EN', flag: '🇬🇧', color: 'text-brand-400' },
+    id: { label: 'ID', flag: '🇮🇩', color: 'text-brand-400' },
+};
+---
+
+<a
+    href={`/blog/${id}`}
+    data-blog-card
+    data-lang={data.language}
+    class="group relative block p-6 rounded-2xl bg-gradient-to-br from-slate-900/80 to-slate-900/40 border border-slate-800/80 hover:border-brand-500/50 transition-all duration-300 hover:shadow-xl hover:shadow-brand-500/10 hover:-translate-y-1 overflow-hidden"
+>
+    <!-- Gradient Overlay on Hover -->
+    <div class="absolute inset-0 bg-gradient-to-br from-brand-500/0 to-orange-500/0 group-hover:from-brand-500/5 group-hover:to-orange-500/5 transition-all duration-300"></div>
+    
+    <!-- Content -->
+    <div class="relative">
+        <!-- Header: Language & Date -->
+        <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center gap-2">
+                <span
+                    class="px-2.5 py-1 text-xs font-bold rounded-md bg-brand-500/10 text-brand-400 border border-brand-500/20"
+                >
+                    {languageConfig[data.language].flag} {languageConfig[data.language].label}
+                </span>
+                {data.tags && data.tags.length > 0 && (
+                    <span class="px-2.5 py-1 text-xs font-medium rounded-md bg-slate-800/50 text-slate-400 border border-slate-700/50">
+                        #{data.tags[0]}
+                    </span>
+                )}
+            </div>
+            <time
+                datetime={data.pubDate.toISOString()}
+                class="flex items-center gap-1.5 text-xs text-slate-500"
+            >
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                {formatDate(data.pubDate, data.language)}
+            </time>
+        </div>
+
+        <!-- Title -->
+        <h3 class="text-lg font-bold text-white mb-3 group-hover:text-brand-400 transition-colors line-clamp-2">
+            {data.title}
+        </h3>
+
+        <!-- Description -->
+        <p class="text-slate-400 text-sm leading-relaxed mb-5 line-clamp-3">
+            {data.description}
+        </p>
+
+        <!-- Footer: Author & Read More -->
+        <div class="flex items-center justify-between">
+            <!-- Author -->
+            {data.author && (
+                <div class="flex items-center gap-2">
+                    <div class="w-7 h-7 rounded-full bg-gradient-to-br from-brand-500 to-orange-500 flex items-center justify-center shadow-lg shadow-brand-500/25">
+                        <span class="text-white font-bold text-xs">
+                            {data.author.charAt(0)}
+                        </span>
+                    </div>
+                    <span class="text-xs text-slate-500">{data.author}</span>
+                </div>
+            )}
+            
+            <!-- Read More Arrow -->
+            <div class="flex items-center gap-1.5 text-brand-400 text-sm font-semibold group-hover:gap-2.5 transition-all">
+                <span>Read</span>
+                <svg
+                    class="w-4 h-4 group-hover:translate-x-1 transition-transform"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M9 5l7 7-7 7"
+                    />
+                </svg>
+            </div>
+        </div>
+    </div>
+</a>

@@ -1,0 +1,243 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../../layouts/BlogPost.astro";
+import BlogPostCard from "../../components/BlogPostCard.astro";
+import BlogNavigation from "../../components/BlogNavigation.astro";
+
+const allPosts = await getCollection("blog");
+
+// Group posts by base slug (without language suffix)
+const postsBySlug = new Map<string, { en?: any; id?: any }>();
+
+allPosts.forEach((post) => {
+    const baseSlug = post.id.replace(/-(en|id)$/, "");
+    if (!postsBySlug.has(baseSlug)) {
+        postsBySlug.set(baseSlug, {});
+    }
+    postsBySlug.get(baseSlug)![post.data.language] = post;
+});
+
+// Convert to array and sort by date (newest first)
+const groupedPosts = Array.from(postsBySlug.entries())
+    .map(([baseSlug, posts]) => ({
+        baseSlug,
+        en: posts.en,
+        id: posts.id,
+        pubDate: posts.en?.data.pubDate || posts.id?.data.pubDate,
+    }))
+    .sort((a, b) => b.pubDate!.getTime() - a.pubDate!.getTime());
+
+// Get all unique posts (show both EN and ID versions separately in listing)
+const allPostsSorted = [...allPosts].sort(
+    (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime(),
+);
+---
+
+<Layout
+    title="Blog - Laju Framework"
+    description="Articles, tutorials, and updates from the Laju Framework team. Available in English and Bahasa Indonesia."
+    language="en"
+>
+    <!-- Navigation -->
+    <BlogNavigation isBlogIndex={true} />
+
+    <!-- Hero Section -->
+    <section class="relative py-16 md:py-24 bg-slate-950 overflow-hidden">
+        <!-- Background Gradient -->
+        <div
+            class="absolute inset-0 bg-gradient-to-b from-brand-500/5 via-transparent to-transparent"
+        ></div>
+        
+        <div class="container relative mx-auto px-6 max-w-7xl">
+            <!-- Header -->
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h1
+                    class="text-4xl md:text-6xl font-black text-white mb-6 tracking-tight"
+                >
+                    <span
+                        class="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-orange-500"
+                    >
+                        Blog
+                    </span>
+                </h1>
+
+                <p
+                    class="text-lg md:text-xl text-slate-400 leading-relaxed"
+                >
+                    Articles, tutorials, and updates from the Laju Framework
+                    team.
+                    <br class="hidden md:block" />
+                    Available in
+                    <span class="text-brand-400 font-semibold">English</span> and
+                    <span class="text-brand-400 font-semibold"
+                        >Bahasa Indonesia</span
+                    >.
+                </p>
+            </div>
+
+            <!-- Search & Filter -->
+            <div class="max-w-2xl mx-auto mb-12">
+                <!-- Search Bar -->
+                <div class="relative mb-6">
+                    <svg
+                        class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                        ></path>
+                    </svg>
+                    <input
+                        type="text"
+                        id="search-input"
+                        placeholder="Search articles..."
+                        class="w-full pl-12 pr-4 py-3 rounded-xl bg-slate-900/80 border border-slate-800 text-white placeholder-slate-500 focus:outline-none focus:border-brand-500/50 focus:ring-2 focus:ring-brand-500/20 transition-all"
+                    />
+                </div>
+
+                <!-- Language Filter -->
+                <div class="flex justify-center" id="language-filter">
+                    <div
+                        class="inline-flex items-center gap-1 p-1 bg-slate-900/80 backdrop-blur-sm rounded-xl border border-slate-800"
+                    >
+                        <button
+                            data-lang="en"
+                            class="px-4 py-2 rounded-lg text-sm font-medium transition-all lang-filter-btn bg-brand-500 text-white"
+                        >
+                            🇬🇧 English
+                        </button>
+                        <button
+                            data-lang="id"
+                            class="px-4 py-2 rounded-lg text-sm font-medium transition-all lang-filter-btn text-slate-400 hover:text-white"
+                        >
+                            🇮🇩 Indonesia
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Posts Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {allPostsSorted.map((post) => <BlogPostCard post={post} />)}
+            </div>
+
+            <!-- Empty State (hidden by default, shown via JS if needed) -->
+            <div id="empty-state" class="hidden text-center py-20">
+                <div
+                    class="inline-flex items-center justify-center w-16 h-16 mb-4 rounded-full bg-slate-900 border border-slate-800"
+                >
+                    <svg
+                        class="w-8 h-8 text-slate-600"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="1.5"
+                            d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"
+                        ></path>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold text-white mb-2">
+                    No posts found
+                </h3>
+                <p class="text-slate-500">
+                    Try adjusting your search or filter.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 border-t border-slate-800 bg-slate-950">
+        <div class="container mx-auto px-6 text-center text-slate-500 text-sm">
+            <p>
+                &copy; {new Date().getFullYear()} Laju Framework. MIT License.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Filter Script -->
+    <script>
+        const filterBtns = document.querySelectorAll(".lang-filter-btn");
+        const cards = document.querySelectorAll("[data-blog-card]");
+        const emptyState = document.getElementById("empty-state");
+        const searchInput = document.getElementById("search-input");
+
+        let currentLang = "en";
+        let searchQuery = "";
+
+        function filterContent() {
+            let visibleCount = 0;
+
+            cards.forEach((card) => {
+                const cardLang = card.getAttribute("data-lang");
+                const title = card.querySelector("h3")?.textContent.toLowerCase() || "";
+                const description = card.querySelector("p")?.textContent.toLowerCase() || "";
+
+                const matchesLang = currentLang === "all" || cardLang === currentLang;
+                const matchesSearch = searchQuery === "" ||
+                    title.includes(searchQuery) ||
+                    description.includes(searchQuery);
+
+                if (matchesLang && matchesSearch) {
+                    card.classList.remove("hidden");
+                    visibleCount++;
+                } else {
+                    card.classList.add("hidden");
+                }
+            });
+
+            // Show/hide empty state
+            if (emptyState) {
+                if (visibleCount === 0) {
+                    emptyState.classList.remove("hidden");
+                } else {
+                    emptyState.classList.add("hidden");
+                }
+            }
+        }
+
+        // Language filter
+        filterBtns.forEach((btn) => {
+            btn.addEventListener("click", () => {
+                currentLang = btn.getAttribute("data-lang");
+
+                // Update button styles
+                filterBtns.forEach((b) => {
+                    b.classList.remove("bg-brand-500", "text-white");
+                    b.classList.add("text-slate-400");
+                });
+                btn.classList.remove("text-slate-400");
+                btn.classList.add("bg-brand-500", "text-white");
+
+                filterContent();
+            });
+        });
+
+        // Search
+        searchInput?.addEventListener("input", (e) => {
+            searchQuery = e.target.value.toLowerCase().trim();
+            filterContent();
+        });
+
+        // Initial filter
+        filterContent();
+    </script>
+</Layout>
+
+<style>
+    .line-clamp-3 {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+</style>
