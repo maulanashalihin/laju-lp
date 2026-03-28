@@ -1,33 +1,38 @@
 ---
-import '../styles/global.css'
+import "../styles/global.css";
 
 interface Props {
-	title?: string;
-	description?: string;
+    title?: string;
+    description?: string;
 }
 
 const {
-	title = "Laju - The Complete TypeScript & Go Framework. 11x Faster Than Express.",
-	description = "Combine HyperExpress/Fiber speed, Svelte 5 reactivity, and full-stack productivity. Built-in auth, storage, email, testing & CI/CD. Zero config, maximum velocity."
+    title = "Laju - The Complete TypeScript & Go Framework. 11x Faster Than Express.",
+    description = "Combine HyperExpress/Fiber speed, Svelte 5 reactivity, and full-stack productivity. Built-in auth, storage, email, testing & CI/CD. Zero config, maximum velocity.",
 } = Astro.props;
 ---
 
 <!doctype html>
 <html lang="en" class="scroll-smooth">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
-		<meta name="description" content={description} />
-		<meta name="theme-color" content="#0f172a" />
-		<title>{title}</title>
-		<link rel="preconnect" href="https://fonts.googleapis.com">
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-	</head>
-	<body class="bg-slate-950 text-white antialiased selection:bg-brand-500 selection:text-white">
-		<slot />
-	</body>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="icon" href="/favicon.png" />
+        <meta name="generator" content={Astro.generator} />
+        <meta name="description" content={description} />
+        <meta name="theme-color" content="#0f172a" />
+        <title>{title}</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+            rel="stylesheet"
+        />
+    </head>
+    <body
+        class="bg-slate-950 text-white antialiased selection:bg-brand-500 selection:text-white"
+    >
+        <slot />
+    </body>
 </html>
