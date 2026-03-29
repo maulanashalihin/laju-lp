@@ -4,15 +4,16 @@ import "../styles/global.css";
 interface Props {
     title?: string;
     description?: string;
+    ogImage?: string;
 }
 
 const {
     title = "Laju - The Complete TypeScript & Go Framework. 11x Faster Than Express.",
     description = "Combine HyperExpress/Fiber speed, Svelte 5 reactivity, and full-stack productivity. Built-in auth, storage, email, testing & CI/CD. Zero config, maximum velocity.",
+    ogImage = "https://laju.dev/og-image.png",
 } = Astro.props;
 
 const canonicalUrl = "https://laju.dev";
-const ogImage = "https://laju.dev/og-image.png";
 ---
 
 <!doctype html>
@@ -37,7 +38,7 @@ const ogImage = "https://laju.dev/og-image.png";
         <meta property="og:description" content={description} />
         <meta property="og:image" content={ogImage} />
         <meta property="og:site_name" content="Laju Framework" />
-        
+
         <!-- Twitter Card -->
         <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:url" content={canonicalUrl} />
