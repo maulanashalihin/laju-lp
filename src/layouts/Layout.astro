@@ -35,7 +35,15 @@ const absoluteOgImage = ogImage.startsWith("/")
         <meta name="description" content={description} />
         <meta name="theme-color" content="#0f172a" />
         <link rel="canonical" href={canonicalUrl} />
-        
+
+        <!-- Twitter Card (must be before OG) -->
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content={canonicalUrl} />
+        <meta property="twitter:title" content={title} />
+        <meta property="twitter:description" content={description} />
+        <meta property="twitter:image" content={absoluteOgImage} />
+        <meta property="twitter:site" content="@maulana_drip_id" />
+
         <!-- Open Graph / Facebook -->
         <meta property="og:type" content="website" />
         <meta property="og:url" content={canonicalUrl} />
@@ -47,14 +55,6 @@ const absoluteOgImage = ogImage.startsWith("/")
         <meta property="og:image:alt" content={title} />
         <meta property="og:site_name" content="Laju Framework" />
         <meta itemprop="image" content={absoluteOgImage} />
-
-        <!-- Twitter Card -->
-        <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:url" content={canonicalUrl} />
-        <meta property="twitter:title" content={title} />
-        <meta property="twitter:description" content={description} />
-        <meta property="twitter:image" content={absoluteOgImage} />
-        <meta property="twitter:site" content="@maulana_drip_id" />
         
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com" />
