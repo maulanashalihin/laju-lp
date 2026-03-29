@@ -14,6 +14,11 @@ const {
 } = Astro.props;
 
 const canonicalUrl = "https://laju.dev";
+
+// Convert relative image path to absolute URL
+const absoluteOgImage = ogImage.startsWith("/") 
+    ? `${canonicalUrl}${ogImage}` 
+    : ogImage;
 ---
 
 <!doctype html>
@@ -36,7 +41,7 @@ const canonicalUrl = "https://laju.dev";
         <meta property="og:url" content={canonicalUrl} />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
-        <meta property="og:image" content={ogImage} />
+        <meta property="og:image" content={absoluteOgImage} />
         <meta property="og:site_name" content="Laju Framework" />
 
         <!-- Twitter Card -->
@@ -44,7 +49,7 @@ const canonicalUrl = "https://laju.dev";
         <meta property="twitter:url" content={canonicalUrl} />
         <meta property="twitter:title" content={title} />
         <meta property="twitter:description" content={description} />
-        <meta property="twitter:image" content={ogImage} />
+        <meta property="twitter:image" content={absoluteOgImage} />
         
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com" />
